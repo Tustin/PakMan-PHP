@@ -19,9 +19,13 @@ if ($contents['magic'] == "UNK")
     <b>Data Size</b>: <?php echo $contents['dataSize'] ?> (<?php echo hexdec($contents['dataSize']) ?> bytes)<br>
     <b>Data Offset</b>: <?php echo $contents['dataOffset'] ?><br>
     <b>Files</b>:
+    <?php if (count($contents['contents']) > 0): ?>
     <ul>
         <?php foreach ($contents['contents'] as $file): ?>
-        <li><?php echo $file ?></li>
+            <li><?php echo $file ?></li>
         <?php endforeach ?>
     </ul>
+    <?php else: ?>
+        No files boi
+    <?php endif ?>
 </body>
