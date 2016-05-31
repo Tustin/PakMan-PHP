@@ -13,6 +13,7 @@ if ($contents['magic'] == "UNK")
     <title>PakMan | Parse</title>
 </head>
 <body>
+    <h3><?php echo $contents['data']->name; ?></h3>
     <b>Magic</b>: <?php echo $contents['magic'] ?><br>
     <b>Content ID</b>: <?php echo $contents['contentID'] ?><br>
     <b>Size</b>: <?php echo $contents['size'] ?> (<?php echo hexdec($contents['size']) ?> bytes)<br>
@@ -28,4 +29,6 @@ if ($contents['magic'] == "UNK")
     <?php else: ?>
         No files boi
     <?php endif ?>
+    <br>
+    <img src="<?php echo $contents['data']->images[0]->url?>" />
 </body>

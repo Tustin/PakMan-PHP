@@ -18,6 +18,7 @@ class Utilities
         "pkgContentsAddress",
         "contents" => [
         ],
+        "data" => null,
     ];
 
     private static function str2hex($string)
@@ -71,6 +72,10 @@ class Utilities
 
         if ($magic == CNT_HEADER || $magic == PKG_HEADER)
         {
+            if (($data = Utilities::getURL($pkgInfo['contentID'])))
+            {
+                $pkgInfo['data'] = json_decode($data);
+            }
             $file->set(0x18);
             $pkgInfo['size'] = Utilities::str2hex($file->read(8));
 
@@ -98,5 +103,30 @@ class Utilities
             }
         }
         return $pkgInfo;
+    }
+    public static function getURL($cid)
+    {
+        $regions = array("US", "GB", "EU", "FR", "JP");
+        $languages = array( "en", "ja", "fr" );
+
+        for ($i = 0; $i < count($regions); $i++)
+        {
+            for ($j = 0; $j < count($languages); $j++)
+            {
+                $url = "https://store.playstation.com/store/api/chihiro/00_09_000/container/" . $regions[$i] . "/" . $languages[$j] . "/999/" . $cid;
+                $c = curl_init($url);
+                curl_setopt($c,  CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
+                $response = curl_exec($c);
+
+                $return = curl_getinfo($c, CURLINFO_HTTP_CODE);
+                if($return == 404) {
+                    continue;
+                } else {
+                    return $response;
+                }
+            }
+        }
+        return false;
     }
 }
